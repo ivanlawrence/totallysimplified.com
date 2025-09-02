@@ -1,9 +1,8 @@
 +++
 date = '2025-09-01T15:44:59-07:00'
-draft = true
 title = 'Hello World'
 +++
-# Hello World
+
 This is the beginning.
 
 I like making my life easier but if something is simple yet done infrequently then it can become difficult.
