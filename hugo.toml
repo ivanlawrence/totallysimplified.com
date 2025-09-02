@@ -2,3 +2,26 @@ baseURL = 'https://totallysimplified.com/'
 languageCode = 'en-us'
 title = 'TotallySimplified.com'
 theme = 'ananke'
+
+# Add the following menu section to your file.
+# This will create a link in your main navigation.
+[menu]
+  [[menu.main]]
+    name = "Home"
+    url = "/"
+    weight = 1
+
+  [[menu.main]]
+    name = "Tools"
+    url = "/tools/"
+    weight = 2
+
+  [[menu.main]]
+    name = "Posts"
+    url = "/posts/"
+    weight = 3
+
+  [[menu.main]]
+    name = "Tags"
+    url = "/tags/"
+    weight = 4

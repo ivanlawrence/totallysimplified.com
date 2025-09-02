@@ -1,0 +1,98 @@
+<div class="prose max-w-none dark:prose-invert">
+    <h1 class="text-3xl sm:text-4xl font-extrabold text-center text-gray-900 mb-6">JSON Formatter & Minifier</h1>
+    <p class="text-center text-gray-500 mb-8">Format or minify your JSON data instantly in the browser.</p>
+
+    <div class="mb-6">
+        <textarea id="jsonInput" rows="10" class="w-full p-4 text-sm bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200" placeholder="Paste your JSON here..."></textarea>
+    </div>
+
+    <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4 mb-6">
+        <button id="formatBtn" class="bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-blue-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">Beautify JSON</button>
+        <button id="minifyBtn" class="bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-blue-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">Minify JSON</button>
+        <button id="copyBtn" class="bg-green-500 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-green-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">Copy to Clipboard</button>
+    </div>
+
+    <div id="messageBox" class="hidden mt-4 p-3 rounded-lg text-sm text-center font-medium transition-opacity duration-300"></div>
+</div>
+
+<script>
+    // The JavaScript code remains the same as before.
+    document.addEventListener('DOMContentLoaded', () => {
+        const jsonInput = document.getElementById('jsonInput');
+        const formatBtn = document.getElementById('formatBtn');
+        const minifyBtn = document.getElementById('minifyBtn');
+        const copyBtn = document.getElementById('copyBtn');
+        const messageBox = document.getElementById('messageBox');
+
+        // Function to display messages to the user
+        const showMessage = (message, type = 'info') => {
+            messageBox.textContent = message;
+            messageBox.classList.remove('hidden', 'bg-red-100', 'text-red-700', 'bg-green-100', 'text-green-700');
+            if (type === 'error') {
+                messageBox.classList.add('bg-red-100', 'text-red-700');
+            } else if (type === 'success') {
+                messageBox.classList.add('bg-green-100', 'text-green-700');
+            }
+            setTimeout(() => {
+                messageBox.classList.add('hidden');
+            }, 3000);
+        };
+
+        // Event listener for the Beautify button
+        formatBtn.addEventListener('click', () => {
+            const input = jsonInput.value.trim();
+            if (!input) {
+                showMessage('Please paste JSON data to format.', 'error');
+                return;
+            }
+            try {
+                const parsedJson = JSON.parse(input);
+                jsonInput.value = JSON.stringify(parsedJson, null, 2);
+                showMessage('JSON beautified successfully!', 'success');
+            } catch (e) {
+                showMessage('Invalid JSON data.', 'error');
+            }
+        });
+
+        // Event listener for the Minify button
+        minifyBtn.addEventListener('click', () => {
+            const input = jsonInput.value.trim();
+            if (!input) {
+                showMessage('Please paste JSON data to minify.', 'error');
+                return;
+            }
+            try {
+                const parsedJson = JSON.parse(input);
+                jsonInput.value = JSON.stringify(parsedJson);
+                showMessage('JSON minified successfully!', 'success');
+            } catch (e) {
+                showMessage('Invalid JSON data.', 'error');
+            }
+        });
+
+        // Event listener for the Copy button
+        copyBtn.addEventListener('click', () => {
+            const textToCopy = jsonInput.value;
+            if (textToCopy) {
+                navigator.clipboard.writeText(textToCopy).then(() => {
+                    showMessage('Copied to clipboard!', 'success');
+                }).catch(err => {
+                    // Fallback for older browsers or insecure contexts
+                    const textarea = document.createElement('textarea');
+                    textarea.value = textToCopy;
+                    document.body.appendChild(textarea);
+                    textarea.select();
+                    try {
+                        document.execCommand('copy');
+                        showMessage('Copied to clipboard!', 'success');
+                    } catch (err) {
+                        showMessage('Could not copy to clipboard. Please copy manually.', 'error');
+                    }
+                    document.body.removeChild(textarea);
+                });
+            } else {
+                showMessage('Nothing to copy.', 'error');
+            }
+        });
+    });
+</script>
